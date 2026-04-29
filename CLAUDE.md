@@ -180,12 +180,17 @@ NEXT_PUBLIC_SITE_URL=
 - [x] `app/(public)/products/[id]/ImageGallery.tsx`（複数画像ギャラリー）
 - [x] `product_images`テーブル追加（Supabase済み）
 - [x] `products.thumbnail_url`カラム追加（Supabase済み）
+- [x] 管理画面（`/admin`）- 商品一覧・登録・編集・削除・公開切替
+- [x] R2ファイルアップロードAPI（`/api/admin/upload`）
+- [x] 商品CRUD API（`/api/admin/products`）
+- [x] 商品画像API（`/api/admin/product-images`）
+- [x] ADMIN_EMAILによる管理者アクセス制限
+- [x] R2パブリックアクセス設定・R2_PUBLIC_URL環境変数
 - [x] Stripe決済フロー（ローカル動作確認済み）
 - [x] Webhook → DB保存（動作確認済み）
 - [x] 購入完了メール送信（動作確認済み）
 
 ### 未実装
-- [ ] **管理画面**（商品登録・R2ファイルアップロード ← 次に着手）
 - [ ] 検索・絞り込み機能（商品一覧ページ）
 - [ ] `products`テーブルに`access_url`・`license_key`カラム追加（saas対応）
 - [ ] saasタイプのダッシュボード表示
