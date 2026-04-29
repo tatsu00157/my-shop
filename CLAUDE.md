@@ -26,7 +26,7 @@
 |---|---|---|
 | フロントエンド | Next.js 16.2.4 (App Router) | UI・販売ページ |
 | スタイリング | Tailwind CSS v4 | |
-| 認証 | NextAuth.js v4 | Google OAuth + JWT戦略 |
+| 認証 | NextAuth.js v4 | Google OAuth + メール魔法リンク + Supabaseアダプター + database戦略 |
 | 決済 | Stripe Checkout | APIバージョン: 2026-04-22.dahlia |
 | DB | Supabase (PostgreSQL) | |
 | ファイル置き場 | Cloudflare R2 | AWS S3互換 |
@@ -164,7 +164,7 @@ NEXT_PUBLIC_SITE_URL=
 - [x] `lib/supabase.ts`
 - [x] `lib/r2.ts`
 - [x] `lib/resend.ts`
-- [x] `lib/auth.ts`（Google OAuth）
+- [x] `lib/auth.ts`（Google OAuth + メール魔法リンク + SupabaseAdapter + database戦略）
 - [x] `types/index.ts`
 - [x] `app/layout.tsx` / `app/providers.tsx`
 - [x] `components/Header.tsx`
@@ -206,8 +206,10 @@ NEXT_PUBLIC_SITE_URL=
 ## 設計上の変更点（READMEからの差異）
 
 - `purchases.user_id uuid` → `purchases.user_email text`
-  - 理由: NextAuth JWT戦略を採用しUUIDではなくメールアドレスで識別
-- 認証: Google OAuth（NextAuth v4 + JWT戦略、DBアダプター不使用）
+  - 理由: メールアドレスで購入者を識別（Google OAuthもメールログインも統一）
+- 認証: Google OAuth + メール魔法リンク（NextAuth v4 + `@auth/supabase-adapter` + database戦略）
+  - Supabaseに `users` / `accounts` / `sessions` / `verification_tokens` テーブルが必要（作成済み）
+  - メール送信はResend経由（SMTPプロキシ）
 - `app/(public)/page.tsx` は作成せず `app/page.tsx` を使用
   - 理由: 同じルート `/` に複数のpage.tsxは作成不可
 - ホスティング: VercelではなくVPS（自前サーバー）
