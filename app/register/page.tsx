@@ -3,33 +3,44 @@
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
-export default function LoginPage() {
-  const router = useRouter()
+export default function RegisterPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setLoading(true)
     setError('')
 
-    const res = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    })
-
-    if (res?.error) {
-      setError('メールアドレスまたはパスワードが正しくありません')
-      setLoading(false)
-    } else {
-      router.push('/dashboard')
-      router.refresh()
+    if (password !== confirm) {
+      setError('パスワードが一致しません')
+      return
     }
+    if (password.length < 8) {
+      setError('パスワードは8文字以上にしてください')
+      return
+    }
+
+    setLoading(true)
+
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+    const data = await res.json()
+
+    if (!res.ok) {
+      setError(data.error ?? '登録に失敗しました')
+      setLoading(false)
+      return
+    }
+
+    // 登録後に自動ログイン
+    await signIn('credentials', { email, password, callbackUrl: '/dashboard' })
   }
 
   return (
@@ -38,9 +49,9 @@ export default function LoginPage() {
         <p className="text-3xl font-black bg-gradient-to-r from-pink-500 to-pink-400 bg-clip-text text-transparent mb-2 text-center">
           my shop
         </p>
-        <h1 className="text-lg font-bold text-gray-900 mb-1 text-center">ログイン</h1>
+        <h1 className="text-lg font-bold text-gray-900 mb-1 text-center">新規登録</h1>
         <p className="text-gray-400 text-sm mb-8 text-center">
-          アカウントにログインしてください
+          アカウントを作成してください
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-3 mb-4">
@@ -56,22 +67,25 @@ export default function LoginPage() {
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            placeholder="パスワード"
+            placeholder="パスワード（8文字以上）"
+            required
+            className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent"
+          />
+          <input
+            type="password"
+            value={confirm}
+            onChange={e => setConfirm(e.target.value)}
+            placeholder="パスワード（確認）"
             required
             className="w-full border border-gray-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent"
           />
           {error && <p className="text-red-500 text-xs">{error}</p>}
-          <div className="text-right">
-            <Link href="/forgot-password" className="text-xs text-pink-500 hover:text-pink-600">
-              パスワードを忘れた場合
-            </Link>
-          </div>
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-pink-500 hover:bg-pink-600 text-white rounded-2xl px-4 py-3 font-semibold text-sm transition disabled:opacity-50"
           >
-            {loading ? 'ログイン中...' : 'ログイン'}
+            {loading ? '登録中...' : 'アカウントを作成'}
           </button>
         </form>
 
@@ -91,13 +105,13 @@ export default function LoginPage() {
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05" />
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
           </svg>
-          Googleでログイン
+          Googleで登録
         </button>
 
         <p className="text-center text-sm text-gray-500">
-          アカウントをお持ちでない方は
-          <Link href="/register" className="text-pink-500 font-semibold hover:text-pink-600 ml-1">
-            新規登録
+          すでにアカウントをお持ちの方は
+          <Link href="/login" className="text-pink-500 font-semibold hover:text-pink-600 ml-1">
+            ログイン
           </Link>
         </p>
       </div>

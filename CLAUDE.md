@@ -164,12 +164,18 @@ NEXT_PUBLIC_SITE_URL=
 - [x] `lib/supabase.ts`
 - [x] `lib/r2.ts`
 - [x] `lib/resend.ts`
-- [x] `lib/auth.ts`（Google OAuth + メール魔法リンク + SupabaseAdapter + database戦略）
+- [x] `lib/auth.ts`（Google OAuth + パスワード認証 + SupabaseAdapter + database戦略）
 - [x] `types/index.ts`
 - [x] `app/layout.tsx` / `app/providers.tsx`
 - [x] `components/Header.tsx`
 - [x] `app/page.tsx`（商品一覧）
-- [x] `app/login/page.tsx`
+- [x] `app/login/page.tsx`（メール＋パスワード + Googleログイン）
+- [x] `app/register/page.tsx`（新規登録）
+- [x] `app/forgot-password/page.tsx`（パスワードリセットメール送信）
+- [x] `app/reset-password/page.tsx`（新パスワード設定）
+- [x] `app/api/auth/register/route.ts`（ユーザー登録API）
+- [x] `app/api/auth/forgot-password/route.ts`（リセットメール送信API）
+- [x] `app/api/auth/reset-password/route.ts`（パスワード更新API）
 - [x] `app/api/auth/[...nextauth]/route.ts`
 - [x] `app/api/checkout/route.ts`
 - [x] `app/api/webhooks/stripe/route.ts`
@@ -207,9 +213,10 @@ NEXT_PUBLIC_SITE_URL=
 
 - `purchases.user_id uuid` → `purchases.user_email text`
   - 理由: メールアドレスで購入者を識別（Google OAuthもメールログインも統一）
-- 認証: Google OAuth + メール魔法リンク（NextAuth v4 + `@auth/supabase-adapter` + database戦略）
-  - Supabaseに `users` / `accounts` / `sessions` / `verification_tokens` テーブルが必要（作成済み）
-  - メール送信はResend経由（SMTPプロキシ）
+- 認証: Google OAuth + メール＋パスワード（NextAuth v4 + `@auth/supabase-adapter` + database戦略）
+  - Supabaseに `users` / `accounts` / `sessions` / `verification_tokens` / `password_reset_tokens` テーブルが必要（作成済み）
+  - `users.password_hash` カラム追加済み
+  - パスワードリセットメールはResend経由で送信
 - `app/(public)/page.tsx` は作成せず `app/page.tsx` を使用
   - 理由: 同じルート `/` に複数のpage.tsxは作成不可
 - ホスティング: VercelではなくVPS（自前サーバー）

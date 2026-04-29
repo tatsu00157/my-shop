@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 
 export function Header() {
   const { data: session } = useSession()
@@ -35,12 +35,20 @@ export function Header() {
               </button>
             </>
           ) : (
-            <button
-              onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
-              className="bg-gradient-to-r from-pink-500 to-pink-400 hover:from-pink-600 hover:to-pink-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition shadow-md shadow-pink-200"
-            >
-              ログイン
-            </button>
+            <>
+              <Link
+                href="/login"
+                className="text-sm font-medium text-gray-600 hover:text-pink-500 transition px-3 py-2 rounded-xl hover:bg-pink-50"
+              >
+                ログイン
+              </Link>
+              <Link
+                href="/register"
+                className="bg-gradient-to-r from-pink-500 to-pink-400 hover:from-pink-600 hover:to-pink-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition shadow-md shadow-pink-200"
+              >
+                新規登録
+              </Link>
+            </>
           )}
         </nav>
       </div>
