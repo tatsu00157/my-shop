@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ダークモードをクラス指定に変更（メディアクエリによる自動適用を無効化） */
+@variant dark (&:is(.dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
