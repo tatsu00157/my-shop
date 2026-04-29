@@ -17,6 +17,30 @@ function EyeIcon({ open }: { open: boolean }) {
   )
 }
 
+function PasswordRequirements({ password }: { password: string }) {
+  const rules = [
+    { label: '8文字以上', ok: password.length >= 8 },
+    { label: '英字を含む', ok: /[a-zA-Z]/.test(password) },
+    { label: '数字を含む', ok: /[0-9]/.test(password) },
+  ]
+  if (!password) return null
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {rules.map(r => (
+        <span
+          key={r.label}
+          className={`inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full font-medium transition-colors ${
+            r.ok ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-400'
+          }`}
+        >
+          <span>{r.ok ? '✓' : '·'}</span>
+          {r.label}
+        </span>
+      ))}
+    </div>
+  )
+}
+
 function ResetPasswordForm() {
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
@@ -53,9 +77,10 @@ function ResetPasswordForm() {
     e.preventDefault()
     setError('')
 
-    if (password.length < 8) { setError('パスワードは8文字以上にしてください'); return }
-    if (!/[a-zA-Z]/.test(password)) { setError('パスワードに英字を含めてください'); return }
-    if (!/[0-9]/.test(password)) { setError('パスワードに数字を含めてください'); return }
+    if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+      setError('パスワードの要件を満たしてください')
+      return
+    }
     if (password !== confirm) { setError('パスワードが一致しません'); return }
 
     setLoading(true)
@@ -82,7 +107,7 @@ function ResetPasswordForm() {
           type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={e => setPassword(e.target.value)}
-          placeholder="新しいパスワード（8文字以上、英字と数字を含む）"
+          placeholder="新しいパスワード"
           required
           className="w-full border border-gray-200 rounded-2xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent"
         />
@@ -95,6 +120,9 @@ function ResetPasswordForm() {
           <EyeIcon open={showPassword} />
         </button>
       </div>
+
+      <PasswordRequirements password={password} />
+
       <div className="relative">
         <input
           type={showConfirm ? 'text' : 'password'}
