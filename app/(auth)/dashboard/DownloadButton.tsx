@@ -24,7 +24,7 @@ export function DownloadButton({ productId }: { productId: string }) {
     <button
       onClick={handleDownload}
       disabled={loading}
-      className="shrink-0 bg-black text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-800 transition disabled:opacity-50"
+      className="w-full bg-pink-500 hover:bg-pink-600 text-white text-sm px-4 py-2.5 rounded-xl font-medium transition disabled:opacity-50"
     >
       {loading ? '取得中...' : 'ダウンロード'}
     </button>

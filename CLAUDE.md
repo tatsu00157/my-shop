@@ -176,13 +176,16 @@ NEXT_PUBLIC_SITE_URL=
 - [x] `app/api/downloads/[productId]/route.ts`
 - [x] `app/(public)/products/[id]/page.tsx`
 - [x] `app/(auth)/dashboard/page.tsx`
+- [x] デザイン全般（ピンク系・BOOTH風）
+- [x] `app/(public)/products/[id]/ImageGallery.tsx`（複数画像ギャラリー）
+- [x] `product_images`テーブル追加（Supabase済み）
+- [x] `products.thumbnail_url`カラム追加（Supabase済み）
 - [x] Stripe決済フロー（ローカル動作確認済み）
 - [x] Webhook → DB保存（動作確認済み）
 - [x] 購入完了メール送信（動作確認済み）
 
 ### 未実装
-- [ ] **デザイン全般**（ピンク系・BOOTH風 ← 次に着手）
-- [ ] **管理画面**（商品登録・R2ファイルアップロード）
+- [ ] **管理画面**（商品登録・R2ファイルアップロード ← 次に着手）
 - [ ] `products`テーブルに`access_url`・`license_key`カラム追加（saas対応）
 - [ ] saasタイプのダッシュボード表示
 - [ ] contentタイプのコンテンツビューワー

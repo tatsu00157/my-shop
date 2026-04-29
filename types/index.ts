@@ -8,7 +8,16 @@ export type Product = {
   type: ProductType
   file_key: string | null
   stripe_price_id: string
+  thumbnail_url: string | null
   is_active: boolean
+  created_at: string
+}
+
+export type ProductImage = {
+  id: string
+  product_id: string
+  url: string
+  sort_order: number
   created_at: string
 }
 
@@ -21,6 +30,11 @@ export type Purchase = {
   stripe_session_id: string
   status: PurchaseStatus
   created_at: string
-  // JOINしたときに付与される
   product?: Product
+}
+
+export const TYPE_LABEL: Record<ProductType, string> = {
+  download: 'ダウンロード',
+  saas: 'システム',
+  content: 'コンテンツ',
 }

@@ -35,7 +35,7 @@ export function PurchaseButton({ productId }: { productId: string }) {
     <button
       onClick={handlePurchase}
       disabled={loading}
-      className="w-full bg-black text-white rounded-xl py-4 text-lg font-semibold hover:bg-gray-800 transition disabled:opacity-50"
+      className="w-full bg-pink-500 hover:bg-pink-600 text-white rounded-2xl py-4 text-lg font-bold transition disabled:opacity-50 shadow-lg shadow-pink-200"
     >
       {loading ? '処理中...' : session ? '購入する' : 'ログインして購入する'}
     </button>
