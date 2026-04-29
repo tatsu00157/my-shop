@@ -12,6 +12,12 @@ export async function POST(req: NextRequest) {
   if (password.length < 8) {
     return NextResponse.json({ error: 'パスワードは8文字以上にしてください' }, { status: 400 })
   }
+  if (!/[a-zA-Z]/.test(password)) {
+    return NextResponse.json({ error: 'パスワードに英字を含めてください' }, { status: 400 })
+  }
+  if (!/[0-9]/.test(password)) {
+    return NextResponse.json({ error: 'パスワードに数字を含めてください' }, { status: 400 })
+  }
 
   const { data: existing } = await supabaseAdmin
     .from('users')
